@@ -1,4 +1,4 @@
-# Admin User Stories
+## Admin User Stories
 
 **Title:** _As an Administrator, I want to log with my username and password, so that manage the platform securely._
 
@@ -74,7 +74,7 @@
     * Consider potential edge cases for months with no appointments.
     * This procedure is for direct CLI access; no GUI integration is required for this specific story.
 
-# Patient User Stories
+## Patient User Stories
 
 **Title:** _As a Patient, I want to view a list of doctors without logging in, so that I can explore options before registering._
 
@@ -148,7 +148,7 @@
     * Potentially include an option to add appointments to personal calendar.
     * What information is visible for each appointment? (e.g. status, location, notes).
 
-# Doctor User Stories
+## Doctor User Stories
 
 **Title:** _As a Doctor, I want to log in to the portal, so that I can manage my appointments._
 
