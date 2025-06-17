@@ -1,0 +1,104 @@
+DELIMITER $$
+
+CREATE PROCEDURE GetDailyAppointmentReport(
+    IN input_date DATE
+)
+BEGIN
+    SELECT
+        a.id AS appointment_id,
+        a.appointment_time,
+        a.status,
+        d.id AS doctor_id,
+        d.name AS doctor_name,
+        p.id AS patient_id,
+        p.name AS patient_name
+    FROM
+        appointments a
+    JOIN
+        doctors d ON a.doctor_id = d.id
+    JOIN
+        patients p ON a.patient_id = p.id
+    WHERE
+        DATE(a.appointment_time) = input_date;
+END $$
+
+DELIMITER ;
+
+CALL GetDailyAppointmentReport('2025-07-01');
++----------------+----------------------------+--------+-----------+------------------+------------+--------------+
+| appointment_id | appointment_time           | status | doctor_id | doctor_name      | patient_id | patient_name |
++----------------+----------------------------+--------+-----------+------------------+------------+--------------+
+|            131 | 2025-07-01 09:00:00.000000 |      0 |         1 | Dr. Emily Adams  |          1 | Jane Doe     |
+|            156 | 2025-07-01 10:00:00.000000 |      0 |         2 | Dr. Mark Johnson |          1 | Jane Doe     |
++----------------+----------------------------+--------+-----------+------------------+------------+--------------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+
+DELIMITER $$
+
+CREATE PROCEDURE GetDoctorWithMostPatientsByMonth(
+    IN input_month INT,
+    IN input_year INT
+)
+BEGIN
+    SELECT
+        doctor_id,
+        COUNT(patient_id) AS patients_seen
+    FROM
+        appointments
+    WHERE
+        MONTH(appointment_time) = input_month
+        AND YEAR(appointment_time) = input_year
+    GROUP BY
+        doctor_id
+    ORDER BY
+        patients_seen DESC
+    LIMIT 1;
+END $$
+
+DELIMITER ;
+
+CALL GetDoctorWithMostPatientsByMonth(7, 2025);
++-----------+---------------+
+| doctor_id | patients_seen |
++-----------+---------------+
+|         1 |            25 |
++-----------+---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+
+DELIMITER $$
+
+CREATE PROCEDURE GetDoctorWithMostPatientsByYear(
+    IN input_year INT
+)
+BEGIN
+    SELECT
+        doctor_id,
+        COUNT(patient_id) AS patients_seen
+    FROM
+        appointments
+    WHERE
+        YEAR(appointment_time) = input_year
+    GROUP BY
+        doctor_id
+    ORDER BY
+        patients_seen DESC
+    LIMIT 1;
+END $$
+
+DELIMITER ;
+
+mysql> CALL GetDoctorWithMostPatientsByYear(2025);
++-----------+---------------+
+| doctor_id | patients_seen |
++-----------+---------------+
+|         1 |            34 |
++-----------+---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)

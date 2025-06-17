@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class DoctorAvailability {
     private LocalDateTime endTime;
 
     @NotNull(message = "Availability status cannot be null")
+    @ColumnDefault(value = "true")
     private Boolean isAvailable = true;
 
     public DoctorAvailability() {

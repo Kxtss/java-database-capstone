@@ -41,7 +41,7 @@ public class Doctor {
     @NotNull(message = "Phone cannot be null")
     @NotBlank(message = "Phone cannot be empty")
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
-    @Column(length = 10)
+    @Column(length = 12)
     private String phone;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

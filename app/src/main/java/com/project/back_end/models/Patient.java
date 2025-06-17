@@ -32,7 +32,7 @@ public class Patient {
     @NotNull(message = "Phone cannot be null")
     @NotBlank(message = "Phone cannot be empty")
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
-    @Column(length = 10)
+    @Column(length = 12)
     private String phone;
 
     @Column(length = 255)
