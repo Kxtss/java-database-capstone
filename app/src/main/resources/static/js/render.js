@@ -21,8 +21,11 @@ function selectRole(role) {
 
 function renderContent() {
   const role = getRole();
-  if (!role) {
-    window.location.href = "/"; // if no role, send to role selection page
+
+  if (!role && !window.location.pathname.endsWith("/") && !window.location.pathname.endsWith("/index.html")) {
+    window.location.href = "/";
     return;
   }
+  renderHeader();
+  renderFooter();
 }
