@@ -14,8 +14,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'maven'
 
       - name: Compile with Maven
         run: |
           cd app
-          mvn clean compile
+          mvn -B clean compile -Dfile.encoding=UTF-8 -Dmaven.compiler.encoding=UTF-8
