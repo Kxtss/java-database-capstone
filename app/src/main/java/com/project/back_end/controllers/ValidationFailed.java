@@ -1,18 +1,48 @@
 package com.project.back_end.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
 public class ValidationFailed {
 
-// 1. Set Up the Global Exception Handler:
-//    - Annotate the class with `@RestControllerAdvice` to apply it globally across all controllers.
-//    - This class is responsible for handling exceptions and customizing error responses uniformly.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(
+            MethodArgumentNotValidException ex
+    ) {
+        Map<String, String> errors = new HashMap<>();
+        ex
+                .getBindingResult()
+                .getAllErrors()
+                .forEach(error -> {
+                    String fieldName = ((FieldError) error).getField();
+                    String errorMessage = error.getDefaultMessage();
+                    errors.put(fieldName, errorMessage);
+                });
 
+        Map<String, String> response = new HashMap<>();
+        if (!errors.isEmpty()) {
+            response.put("message", "Input validation failed.");
+            response.put("details", errors.toString());
+        } else {
+            response.put("message", "Input validation failed, but no specific field errors were reported.");
+        }
 
-// 2. Define the `handleValidationException` Method:
-//    - Annotate with `@ExceptionHandler(MethodArgumentNotValidException.class)` to intercept validation exceptions thrown when a request body fails `@Valid` checks.
-//    - Iterates through all field validation errors from the exception.
-//    - Extracts and collects default error messages (e.g., "Email is required", "Invalid phone number").
-//    - Constructs a response map containing the error message under the `"message"` key.
-//    - Returns a `ResponseEntity` with HTTP 400 Bad Request status and the error message in the body.
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
-
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGeneralException(
+            Exception ex
+    ) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("message", "An unexpected error occurred: " + ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

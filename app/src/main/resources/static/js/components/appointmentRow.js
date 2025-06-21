@@ -1,8 +1,7 @@
-// appointmentRow.js
 export function getAppointments(appointment) {
-  const tr = document.createElement("tr");
+  const tableRow = document.createElement("tr");
 
-  tr.innerHTML = `
+  tableRow.innerHTML = `
       <td class="patient-id">${appointment.patientName}</td>
       <td>${appointment.doctorName}</td>
       <td>${appointment.date}</td>
@@ -10,10 +9,15 @@ export function getAppointments(appointment) {
       <td><img src="../assets/images/edit/edit.png" alt="action" class="prescription-btn" data-id="${appointment.id}"></img></td>
     `;
 
-  // Attach event listeners
-  tr.querySelector(".prescription-btn").addEventListener("click", () => {
-    window.location.href = `addPrescription.html?id=${patient.id}`;
-  });
+tableRow.querySelector(".prescription-btn").addEventListener("click", () => {
+  const appointmentId = appointment.id || appointment._id;
+  const patientName = encodeURIComponent(appointment.patientName);
+window.location.href = `/pages/addPrescription.html?appointmentId=${appointmentId}&patientName=${patientName}`;
+});
+console.log("appointment object:", appointment);
+console.log("appointment id:", appointment?.id);
+console.log("patient name:", appointment?.patientName);
 
-  return tr;
+
+  return tableRow;
 }

@@ -1,64 +1,34 @@
 package com.project.back_end.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
-@Table(name = "patients")
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Name cannot be null")
-    @NotBlank(message = "Name cannot be empty")
-    @Size(min = 5, max = 255, message = "Name must be between 5 and 255 characters")
+    @NotNull(message = "Name cannot be null.")
+    @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters.")
     private String name;
 
-    @Email(message = "Email should be valid")
-    @NotNull(message = "Email cannot be null")
-    @Column(unique = true, length = 255)
-    @Size(min = 3, max = 255, message = "Email must be between 3 and 255 characters")
+    @NotNull(message = "Email cannot be null.")
+    @Email(message = "Invalid email format.")
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull(message = "Password cannot be null")
-    @NotBlank(message = "Password cannot be empty")
-    @Size(min = 6, max = 255, message = "Password must be between 6 and 255 characters")
-    private String password_hash;
+    @NotNull(message = "Password cannot be null.")
+    @Size(min = 6, message = "Password must be at least 6 characters long.")
+    private String password;
 
-    @NotNull(message = "Phone cannot be null")
-    @NotBlank(message = "Phone cannot be empty")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
-    @Column(length = 12)
+    @NotNull(message = "Phone number cannot be null.")
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be exactly 10 digits.")
     private String phone;
 
-    @Column(length = 255)
-    @Size(max = 255, message = "Address must be valid")
-    @NotNull(message = "Address cannot be null")
+    @NotNull(message = "Address cannot be null.")
+    @Size(max = 255, message = "Address cannot exceed 255 characters.")
     private String address;
-
-    public Patient() {
-    }
-
-    public Patient(String name, String email, String password_hash, String phone, String address) {
-        this.name = name;
-        this.email = email;
-        this.password_hash = password_hash;
-        this.phone = phone;
-        this.address = address;
-    }
-
-    public Patient(Long id, String name, String email, String password_hash, String phone, String address) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password_hash = password_hash;
-        this.phone = phone;
-        this.address = address;
-    }
 
     public Long getId() {
         return id;
@@ -84,12 +54,12 @@ public class Patient {
         this.email = email;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhone() {
@@ -106,10 +76,5 @@ public class Patient {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    @Override
-    public String toString() {
-        return "Patient{" + "id=" + id + ", name='" + name + '\'' + ", email='" + email + '\'' + ", phone='" + phone + '\'' + ", address='" + address + '\'' + '}';
     }
 }

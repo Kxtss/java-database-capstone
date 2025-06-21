@@ -1,44 +1,37 @@
 package com.project.back_end.mvc;
 
-import com.project.back_end.services.Service;
+import java.util.Map;
+
+import com.project.back_end.services.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Map;
-
 @Controller
 public class DashboardController {
 
     @Autowired
-    private Service service;
+    AppService service;
 
     @GetMapping("/adminDashboard/{token}")
     public String adminDashboard(@PathVariable String token) {
-        Map<String, String> validateResult = service.validateToken(token, "admin");
-
-        if (validateResult.isEmpty()) {
+        Map<String, String> map = service.validateToken(token, "admin").getBody();
+        System.out.println("map" + map);
+        if (map.isEmpty()) {
             return "admin/adminDashboard";
-        } else {
-            return "redirect:/";
         }
+        return "redirect:http://localhost:8080";
     }
 
     @GetMapping("/doctorDashboard/{token}")
     public String doctorDashboard(@PathVariable String token) {
-        Map<String, String> validateResult = service.validateToken(token, "doctor");
-
-        if (validateResult.isEmpty()) {
+        Map<String, String> map = service.validateToken(token, "doctor").getBody();
+        System.out.println("map" + map);
+        if (map.isEmpty()) {
             return "doctor/doctorDashboard";
-        } else {
-            return "redirect:/";
         }
-    }
 
-    @GetMapping("/")
-    public String homepage() {
-        return "index";
+        return "redirect:http://localhost:8080";
     }
-
 }

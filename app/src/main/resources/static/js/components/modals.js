@@ -1,4 +1,5 @@
 // modals.js
+
 export function openModal(type) {
   let modalContent = '';
   if (type === 'addDoctor') {
@@ -99,3 +100,4 @@ export function openModal(type) {
     document.getElementById('doctorLoginBtn').addEventListener('click', doctorLoginHandler);
   }
 }
+window.openModal = openModal;

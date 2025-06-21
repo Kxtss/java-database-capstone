@@ -1,16 +1,18 @@
-// appointmentRecordService.js
-import { API_BASE_URL } from "../config/config.js";
-const APPOINTMENT_API = `${API_BASE_URL}/appointments`;
+import API_BASE_URI from '../config/config.js';
 
+const APPOINTMENT_API = `${API_BASE_URI}/appointments`;
 
-//This is for the doctor to get all the patient Appointments
 export async function getAllAppointments(date, patientName, token) {
   const response = await fetch(`${APPOINTMENT_API}/${date}/${patientName}/${token}`);
+
   if (!response.ok) {
     throw new Error("Failed to fetch appointments");
   }
 
-  return await response.json();
+  const data = await response.json();
+  console.log("JSON response from API:", data);
+
+  return data;
 }
 
 export async function bookAppointment(appointment, token) {
@@ -53,7 +55,7 @@ export async function updateAppointment(appointment, token) {
       message: data.message || "Something went wrong"
     };
   } catch (error) {
-    console.error("Error while booking appointment:", error);
+    console.error("Error while updating appointment:", error);
     return {
       success: false,
       message: "Network error. Please try again later."
